@@ -9,8 +9,9 @@ const pokeTypeTwo = document.querySelector('.poke-type-two');
 const pokeWeight = document.querySelector('.poke-weight');
 const pokeHeight = document.querySelector('.poke-height');
 const pokeListItems = document.querySelectorAll('.list-item');
+const leftButton = document.querySelector('.left-button');
+const rightButton = document.querySelector('.right-button');
 
-console.log(pokeListItems);
 
 // Constants and Variables
 const TYPES = [
@@ -21,8 +22,10 @@ const TYPES = [
     'electric', 'psychic', 'ice',
     'dragon', 'dark', 'fairy'
 ];
+let prevUrl = null;
+let nextUrl = null;
 
-// Functions
+// FUNCTIONS
 // Will capitalize first letter of string
 const capitalize = (str) => str[0].toUpperCase() + str.substr(1);
 
@@ -34,8 +37,35 @@ const resetScreen = () => {
     }
 };
 
+// Get data for right-side of script - Pokemon list
+const fetchPokeList = url => {
+    fetch(url) // Can only fit 20 per page
+    .then(res => res.json())
+    // Navigation control; Prev, Next
+    .then(data => {
+        const { results, previous, next } = data;
+        prevUrl = previous;
+        nextUrl = next;
+
+        for (let i = 0; i < pokeListItems.length; i++) {
+            const pokeListItem = pokeListItems[i];
+            const resultData = results[i];
+
+            if (resultData) {
+                const { name, url } = resultData;
+                const urlArray = url.split('/');
+                const id = urlArray[urlArray.length - 2];
+                pokeListItem.textContent = id + '. ' + capitalize(name);
+            } else {
+                pokeListItem.textContent = '';
+            }
+        }
+    });
+}
+
 // Get data for left-side of script - each Pokemon
-fetch('https://pokeapi.co/api/v2/pokemon/1')
+const fetchPokeData = id => {
+    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
     .then(res =>  res.json())
     .then(data => {
         resetScreen();
@@ -66,25 +96,39 @@ fetch('https://pokeapi.co/api/v2/pokemon/1')
         pokeFrontImage.src = data['sprites']['front_default'] || '';
         pokeBackImage.src = data['sprites']['back_default'] || '';
     });
+}
 
-// Get data for right-side of script - Pokemon list
-fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=20') // Can only fit 20 per page
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-        const { results } = data;
+// Left-button click (PREV) to view Pokemon list
+const handleLeftButtonClick = () => {
+    if (prevUrl) {
+        fetchPokeList(prevUrl);
+    }
+};
 
-        for (let i = 0; i < pokeListItems.length; i++) {
-            const pokeListItem = pokeListItems[i];
-            const resultData = results[i];
+// Right-button click (NEXT) to view Pokemon list
+const handleRightButtonClick = () => {
+    if (nextUrl) {
+        fetchPokeList(nextUrl);
+    }
+};
 
-            if (resultData) {
-                const { name, url } = resultData;
-                const urlArray = url.split('/');
-                const id = urlArray[urlArray.length - 2];
-                pokeListItem.textContent = id + '. ' + capitalize(name);
-            } else {
-                pokeListItem.textContent = '';
-            }
-        }
-    });
+// Clicks on and displays individual Pokemon's data
+const handleListItemClick = (e) => {
+    if (!e.target) return;
+
+    const listItem = e.target;
+    if (!listItem.textContent) return;
+
+    const id = listItem.textContent.split('.')[0];
+    fetchPokeData(id);
+};
+
+// Adding event listeners
+leftButton.addEventListener('click', handleLeftButtonClick);
+rightButton.addEventListener('click', handleRightButtonClick);
+for (const pokeListItem of pokeListItems) {
+    pokeListItem.addEventListener('click', handleListItemClick)
+}
+
+// Initialize App
+fetchPokeList('https://pokeapi.co/api/v2/pokemon?offset=0&limit=20');
