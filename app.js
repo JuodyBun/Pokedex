@@ -8,9 +8,11 @@ const pokeTypeOne = document.querySelector('.poke-type-one');
 const pokeTypeTwo = document.querySelector('.poke-type-two');
 const pokeWeight = document.querySelector('.poke-weight');
 const pokeHeight = document.querySelector('.poke-height');
+const pokeListItems = document.querySelectorAll('.list-item');
+
+console.log(pokeListItems);
 
 // Constants and Variables
-
 const TYPES = [
     'normal', 'fighting', 'flying',
     'poison', 'ground', 'rock',
@@ -21,7 +23,6 @@ const TYPES = [
 ];
 
 // Functions
-
 // Will capitalize first letter of string
 const capitalize = (str) => str[0].toUpperCase() + str.substr(1);
 
@@ -33,8 +34,8 @@ const resetScreen = () => {
     }
 };
 
-// API connection; first connect with .json file; then displays Pokemon info
-fetch('https://pokeapi.co/api/v2/pokemon/1 ')
+// Get data for left-side of script - each Pokemon
+fetch('https://pokeapi.co/api/v2/pokemon/1')
     .then(res =>  res.json())
     .then(data => {
         resetScreen();
@@ -64,4 +65,26 @@ fetch('https://pokeapi.co/api/v2/pokemon/1 ')
         //Displays Pokemon's sprite(s) if exists 
         pokeFrontImage.src = data['sprites']['front_default'] || '';
         pokeBackImage.src = data['sprites']['back_default'] || '';
+    });
+
+// Get data for right-side of script - Pokemon list
+fetch('https://pokeapi.co/api/v2/pokemon?offset=0&limit=20') // Can only fit 20 per page
+    .then(res => res.json())
+    .then(data => {
+        console.log(data);
+        const { results } = data;
+
+        for (let i = 0; i < pokeListItems.length; i++) {
+            const pokeListItem = pokeListItems[i];
+            const resultData = results[i];
+
+            if (resultData) {
+                const { name, url } = resultData;
+                const urlArray = url.split('/');
+                const id = urlArray[urlArray.length - 2];
+                pokeListItem.textContent = id + '. ' + capitalize(name);
+            } else {
+                pokeListItem.textContent = '';
+            }
+        }
     });
