@@ -73,7 +73,6 @@ const fetchPokeData = id => {
         //Declare values of Pokemon's data type(s)
         const dataTypes = data['types'];
         const dataFirstType = dataTypes[0];
-
         
         //If second data type exists, it will display, if not it will hide
         if(dataTypes[1]) {
