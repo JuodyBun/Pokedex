@@ -70,18 +70,26 @@ const fetchPokeData = id => {
     .then(data => {
         resetScreen();
 
-        //Displays Pokemon's data type(s)
+        //Declare values of Pokemon's data type(s)
         const dataTypes = data['types'];
         const dataFirstType = dataTypes[0];
-        const dataSecondType = dataTypes[1];
-        pokeTypeOne.textContent = capitalize(dataTypes[0]['type']['name']);
+
+        
         //If second data type exists, it will display, if not it will hide
-        if (dataSecondType) {
+        if(dataTypes[1]) {
+            const dataFirstType = dataTypes[1];
+            const dataSecondType = dataTypes[0];
             pokeTypeTwo.classList.remove('hide');
+            pokeTypeOne.textContent = capitalize(dataFirstType['type']['name']);
             pokeTypeTwo.textContent = capitalize(dataSecondType['type']['name']);
-        } else  {
+            mainScreen.classList.add(dataFirstType['type']['name'])
+        }
+        else {
+            const dataFirstType = dataTypes[0];
+            pokeTypeOne.textContent = capitalize(dataFirstType['type']['name']);
             pokeTypeTwo.classList.add('hide');
-            pokeTypeTwo.textContent = '';
+            pokeTypeTwo.textContent = "";
+            mainScreen.classList.add(dataFirstType['type']['name'])
         }
         //Changes the background color to Pokemon's type
         mainScreen.classList.add(dataFirstType['type']['name']);
