@@ -224,7 +224,8 @@
     width: 100px;
   }
   
-  .buttons__button {
+  .b-button,
+  .a-button {
     align-items: center;
     background: black;
     border-radius: 50%;
@@ -237,11 +238,11 @@
     width: 35px;
   }
   
-  .buttons__button:first-child {
+  .b-button:first-child {
     margin-top: 5px;
   }
   
-  .buttons__button:last-child {
+  .a-button:last-child {
      margin-top: -5px;
    }
   

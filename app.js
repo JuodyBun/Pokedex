@@ -12,6 +12,8 @@ const pokeListItems = document.querySelectorAll('.list-item');
 const leftButton = document.querySelector('.left-button');
 const rightButton = document.querySelector('.right-button');
 
+const aButton = document.querySelector('.a-button'); // Select for further info
+const bButton = document.querySelector('.b-button'); // Returns back to Pokemon's main screen
 
 // Constants and Variables
 const TYPES = [
@@ -41,6 +43,7 @@ const resetScreen = () => {
 const fetchPokeList = url => {
     fetch(url) // Can only fit 20 per page
     .then(res => res.json())
+    
     // Navigation control; Prev, Next
     .then(data => {
         const { results, previous, next } = data;
@@ -130,7 +133,13 @@ const handleListItemClick = (e) => {
     fetchPokeData(id);
 };
 
-// Adding event listeners
+// A-button click for further detail of Pokemon (left-screen)
+
+// B-button click to return to main Pokemon screen (left-screen)
+
+// Displays further detail of Pokemon 
+
+// Adding event listeners *ADD NEW SCREEN*
 leftButton.addEventListener('click', handleLeftButtonClick);
 rightButton.addEventListener('click', handleRightButtonClick);
 for (const pokeListItem of pokeListItems) {
