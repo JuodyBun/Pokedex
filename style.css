@@ -96,6 +96,13 @@
     height: 100%;
     padding: 15px;
   }
+
+  /* MAIN SCREEN 2*/
+  .main-screen2 {
+    border-radius: 15px;
+    height: 100%;
+    padding: 15px;
+  }
   
   .screen__header {
     align-items: center;
@@ -105,7 +112,7 @@
   
   .poke-name {
     color: white;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bold;
   }
   
@@ -246,6 +253,16 @@
      margin-top: -5px;
    }
   
+   .b-button:hover,
+   .a-button:hover {
+    background: #A9A9A9;
+    color: black;
+   }
+   
+   .b-button:active,
+   .a-button:active {
+     box-shadow: inset 0 0 2px 2px rgba(0,0,0,.3);
+   }
   
   .left-container__right {
     border-left: 3px solid black;
@@ -359,7 +376,6 @@
   .right-button:active {
     box-shadow: inset 0 0 2px 2px rgba(0,0,0,.3);
   }
-  
   
   .hide {
     display: none;

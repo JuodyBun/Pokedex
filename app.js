@@ -19,6 +19,8 @@ const bButton = document.querySelector('.b-button'); // Returns back to Pokemon'
 const ability1 = document.querySelector('.ability-1'); // First ability
 const ability2 = document.querySelector('.ability-2'); // Second ability
 
+console.log(pokeName);
+
 // Constants and Variables
 const TYPES = [
     'normal', 'fighting', 'flying',
@@ -87,10 +89,12 @@ const fetchPokeData = id => {
     .then(data => {
         resetScreen();
 
+console.log(data);
+
         //Declare values of Pokemon's data type(s)
         const dataTypes = data['types'];
         const dataFirstType = dataTypes[0];
-        
+
         //If second data type exists, it will display, if not it will hide
         if(dataTypes[1]) {
             const dataFirstType = dataTypes[1];
@@ -113,56 +117,56 @@ const fetchPokeData = id => {
         //Display's name, id, height, and weight
         pokeName.textContent = capitalize(data['name']);
         pokeId.textContent = '#' + data['id'].toString().padStart(3, '0');
-        pokeWeight.textContent = data['weight'];
-        pokeHeight.textContent = data['height'];
+        pokeWeight.textContent = (data['weight'] / 4.53947368421).toFixed(0) + " lbs";
+        pokeHeight.textContent = (data['height'] / 3.048).toFixed(1) + " ft";
 
         //Displays Pokemon's sprite(s) if exists 
         pokeFrontImage.src = data['sprites']['front_default'] || '';
         pokeBackImage.src = data['sprites']['back_default'] || '';
     });
 }
+ 
+    // Get data for left-side of script - each Pokemon MORE DETAILS!!
+    const fetchPokeData2 = id => {
+        fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+        .then(res =>  res.json())
+        .then(data => {
+            resetScreen();
 
-// Get data for left-side of script - each Pokemon MORE DETAILS!!
-const fetchPokeData2 = id => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-    .then(res =>  res.json())
-    .then(data => {
-        resetScreen();
+            //Declare values of Pokemon's data type(s)
+            const ability1 = data['abilities'];
+            const ability2 = dataTypes[0];
+            
+            //If second data type exists, it will display, if not it will hide
+            if(dataTypes[1]) {
+                const dataFirstType = dataTypes[1];
+                const dataSecondType = dataTypes[0];
+                pokeTypeTwo.classList.remove('hide');
+                pokeTypeOne.textContent = capitalize(dataFirstType['type']['name']);
+                pokeTypeTwo.textContent = capitalize(dataSecondType['type']['name']);
+                mainScreen2.classList.add(dataFirstType['type']['name'])
+            }
+            else {
+                const dataFirstType = dataTypes[0];
+                pokeTypeOne.textContent = capitalize(dataFirstType['type']['name']);
+                pokeTypeTwo.classList.add('hide');
+                pokeTypeTwo.textContent = "";
+                mainScreen2.classList.add(dataFirstType['type']['name'])
+            }
+            //Changes the background color to Pokemon's type - KEEP
+            mainScreen2.classList.add(dataFirstType['type']['name']);
 
-        //Declare values of Pokemon's data type(s)
-        const dataTypes = data['types'];
-        const dataFirstType = dataTypes[0];
-        
-        //If second data type exists, it will display, if not it will hide
-        if(dataTypes[1]) {
-            const dataFirstType = dataTypes[1];
-            const dataSecondType = dataTypes[0];
-            pokeTypeTwo.classList.remove('hide');
-            pokeTypeOne.textContent = capitalize(dataFirstType['type']['name']);
-            pokeTypeTwo.textContent = capitalize(dataSecondType['type']['name']);
-            mainScreen.classList.add(dataFirstType['type']['name'])
-        }
-        else {
-            const dataFirstType = dataTypes[0];
-            pokeTypeOne.textContent = capitalize(dataFirstType['type']['name']);
-            pokeTypeTwo.classList.add('hide');
-            pokeTypeTwo.textContent = "";
-            mainScreen.classList.add(dataFirstType['type']['name'])
-        }
-        //Changes the background color to Pokemon's type
-        mainScreen.classList.add(dataFirstType['type']['name']);
+            //Display's name, id, height, and weight
+            pokeName.textContent = capitalize(data['name']);
+            pokeId.textContent = '#' + data['id'].toString().padStart(3, '0');
+            pokeWeight.textContent = data['weight'];
+            pokeHeight.textContent = data['height'];
 
-        //Display's name, id, height, and weight
-        pokeName.textContent = capitalize(data['name']);
-        pokeId.textContent = '#' + data['id'].toString().padStart(3, '0');
-        pokeWeight.textContent = data['weight'];
-        pokeHeight.textContent = data['height'];
-
-        //Displays Pokemon's sprite(s) if exists 
-        pokeFrontImage.src = data['sprites']['front_default'] || '';
-        pokeBackImage.src = data['sprites']['back_default'] || '';
-    });
-}
+            //Displays Pokemon's sprite(s) if exists 
+            pokeFrontImage.src = data['sprites']['front_default'] || '';
+            pokeBackImage.src = data['sprites']['back_default'] || '';
+        });
+    }
 
 // Left-button click (PREV) to view Pokemon list
 const handleLeftButtonClick = () => {
@@ -190,14 +194,19 @@ const handleListItemClick = (e) => {
 };
 
 // A-button click for further detail of Pokemon (left-screen)
-const handleAButtonClick = () => {
-    if (moreUrl) {
-        fetchPokeList(moreUrl);
-    }
+const handleAButtonClick = (e) => {
+    if (!e.target) return;
+
+    const listItem = e.target;
+    if (!listItem.textContent) return;
+
+    const id = listItem.textContent.split('.')[0];
+    fetchPokeData(id);
+    resetScreen2;
 };
 
 // B-button click to return to main Pokemon screen (left-screen)
-const handleBButtonClick = () => {
+const handleBButtonClick = (e) => {
     if (returnUrl) {
         fetchPokeList(returnUrl);
     }
