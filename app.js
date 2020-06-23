@@ -19,8 +19,6 @@ const bButton = document.querySelector('.b-button'); // Returns back to Pokemon'
 const ability1 = document.querySelector('.ability-1'); // First ability
 const ability2 = document.querySelector('.ability-2'); // Second ability
 
-console.log(pokeName);
-
 // Constants and Variables
 const TYPES = [
     'normal', 'fighting', 'flying',
@@ -120,6 +118,9 @@ console.log(data);
         pokeWeight.textContent = (data['weight'] / 4.53947368421).toFixed(0) + " lbs";
         pokeHeight.textContent = (data['height'] / 3.048).toFixed(1) + " ft";
 
+        console.log(data['id']);
+        console.log(data['weight']);
+
         //Displays Pokemon's sprite(s) if exists 
         pokeFrontImage.src = data['sprites']['front_default'] || '';
         pokeBackImage.src = data['sprites']['back_default'] || '';
@@ -133,9 +134,14 @@ console.log(data);
         .then(data => {
             resetScreen();
 
-            //Declare values of Pokemon's data type(s)
-            const ability1 = data['abilities'];
-            const ability2 = dataTypes[0];
+            //Declare values of Pokemon's ability type(s)
+            const abilities = data['abilities'];
+            console.log(data['abilities']);
+
+            const dataFirstType = dataTypes[0];
+            ability1.textContent = data['abilities[0].ability[0]'];
+
+           
             
             //If second data type exists, it will display, if not it will hide
             if(dataTypes[1]) {

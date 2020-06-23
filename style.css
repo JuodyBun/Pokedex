@@ -247,10 +247,12 @@
   
   .b-button:first-child {
     margin-top: 5px;
+    cursor: pointer;
   }
   
   .a-button:last-child {
      margin-top: -5px;
+     cursor: pointer;
    }
   
    .b-button:hover,
@@ -331,8 +333,8 @@
     font-size: 12px;
     height: 25px;
     overflow-x: hidden;
-    padding-left: 5px;
-    width: 50%;
+    padding-left: 0px;
+    width: 53%;
   }
   
   .list-item:hover {
